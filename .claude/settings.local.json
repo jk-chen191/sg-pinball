@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(which node && node --version 2>/dev/null || echo \"Node.js not found\")",
+      "Bash(npm init -y)",
+      "Bash(npm install --save-dev jest jest-environment-jsdom)",
+      "Bash(npm test 2>&1)"
+    ]
+  },
+  "enabledPlugins": {
+    "superpowers@superpowers-marketplace": true
+  }
+}

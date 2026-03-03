@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>弹珠游戏</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            touch-action: none;
+        }
+        .game-container {
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+            padding: 10px;
+        }
+        #gameCanvas {
+            border: 3px solid #e94560;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(233, 69, 96, 0.3);
+            max-width: 100%;
+            max-height: 80vh;
+        }
+        .side-panel {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+            min-width: 150px;
+        }
+        .side-panel h2 {
+            margin-bottom: 10px;
+            color: #e94560;
+            font-size: 18px;
+        }
+        .power-bar-container {
+            width: 30px;
+            height: 150px;
+            background: #333;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 15px auto;
+            position: relative;
+        }
+        .power-bar {
+            width: 100%;
+            height: 0%;
+            background: linear-gradient(to top, #00ff00, #ffff00, #ff0000);
+            transition: height 0.1s;
+            position: absolute;
+            bottom: 0;
+        }
+        .power-label {
+            text-align: center;
+            margin-top: 8px;
+            font-size: 11px;
+        }
+        .score-display {
+            font-size: 18px;
+            margin: 8px 0;
+            text-align: center;
+        }
+        .instructions {
+            margin-top: 15px;
+            font-size: 10px;
+            line-height: 1.8;
+            opacity: 0.8;
+        }
+        .message {
+            position: absolute;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            pointer-events: none;
+            animation: fadeOut 2s forwards;
+        }
+        @keyframes fadeOut {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(1.2); }
+        }
+
+        /* 移动端按钮 */
+        .mobile-controls {
+            display: none;
+            width: 100%;
+            max-width: 400px;
+            margin-top: 15px;
+            gap: 10px;
+        }
+        .fire-btn {
+            flex: 1;
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(145deg, #e94560, #c73e54);
+            color: white;
+            font-weight: bold;
+            touch-action: manipulation;
+            user-select: none;
+        }
+        .fire-btn:active {
+            background: linear-gradient(145deg, #c73e54, #e94560);
+            transform: scale(0.98);
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .game-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            .side-panel {
+                display: none;
+            }
+            .mobile-controls {
+                display: flex;
+            }
+            .mobile-info {
+                display: flex;
+                gap: 20px;
+                color: white;
+                font-size: 16px;
+                margin-bottom: 10px;
+            }
+            .mobile-info span {
+                background: rgba(255,255,255,0.1);
+                padding: 5px 15px;
+                border-radius: 5px;
+            }
+            #gameCanvas {
+                max-height: 65vh;
+            }
+        }
+
+        /* 防止双击缩放 */
+        @media (max-width: 1024px) {
+            body {
+                touch-action: manipulation;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-info" style="display: none;">
+        <span>得分：<span id="mobileScore">0</span></span>
+        <span>弹珠：<span id="mobileBalls">5</span></span>
+    </div>
+
+    <div class="game-container">
+        <canvas id="gameCanvas"></canvas>
+        <div class="side-panel">
+            <h2>弹珠游戏</h2>
+            <div class="power-bar-container">
+                <div class="power-bar" id="powerBar"></div>
+            </div>
+            <div class="power-label">按空格键发射</div>
+            <div class="score-display">得分：<span id="score">0</span></div>
+            <div class="score-display">弹珠：<span id="balls">5</span></div>
+            <div class="instructions">
+                <strong>游戏说明：</strong><br>
+                1. 按住空格键蓄力<br>
+                2. 松开空格键发射弹珠<br>
+                3. 弹珠会显示运动轨迹<br>
+                4. 避开阻挡物落入格子<br>
+                5. 不同格子有不同分数
+            </div>
+        </div>
+    </div>
+
+    <div class="mobile-controls">
+        <button class="fire-btn" id="fireBtn">按住发射</button>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
